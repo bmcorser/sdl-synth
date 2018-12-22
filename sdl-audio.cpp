@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 #include "MainAudioPipe.cpp"
 #include "PBView.cpp"
+#include "Cube.cpp"
 
 void draw();
 
@@ -39,6 +40,7 @@ SDL_Window *window;
 SDL_Renderer * renderer;
 
 PBView v = PBView(80, 500, 120, 40);
+Cube cube();
 
 // synth objects
 MainAudioPipe mainAudioPipe_;
@@ -125,6 +127,7 @@ int init(void) {
 
         // Setup renderer
     renderer =  SDL_CreateRenderer( window, -1, 0);
+    cube.setRenderer(renderer);
 
     draw();
 
@@ -197,6 +200,7 @@ void draw(){
 
   
    v.draw(renderer);
+   cube.update(10,10);
     
 
     SDL_RenderPresent(renderer);
