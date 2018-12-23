@@ -40,7 +40,7 @@ SDL_Window *window;
 SDL_Renderer * renderer;
 
 PBView v = PBView(80, 500, 120, 40);
-Cube cube();
+Cube cube;
 
 // synth objects
 MainAudioPipe mainAudioPipe_;

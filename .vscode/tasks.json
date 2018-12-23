@@ -13,7 +13,9 @@
                 "sdl-audio.cpp",
                 "-o",
                 "go",
-                "-lSDL2", "-lSDL2main"
+                "-lSDL2", "-lSDL2main",
+                "&&",
+                "./go"
             ],
             "group": {
                 "kind": "build",
