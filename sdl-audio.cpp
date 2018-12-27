@@ -7,9 +7,12 @@
 #include "PBView.cpp"
 #include "Cube.cpp"
 
+#define PRINT(x) std::cout << x << std::endl;
+
 void draw();
 
-const int WIDTH = 1000, HEIGHT = 800;
+#define WIDTH 1000 
+#define HEIGHT 800
 
 Uint32 sampleRate = 44100;
 Uint32 frameRate =    60;
@@ -31,6 +34,8 @@ SDL_AudioSpec audioSpec;
 //SDL_Surface * windowSurface = NULL;
 
 double speed = 0.025;
+// todo use value from cube class
+
 
 SDL_Event event;
 SDL_Event windowEvent;
@@ -39,7 +44,11 @@ SDL_bool running = SDL_TRUE;
 SDL_Window *window;
 SDL_Renderer * renderer;
 
-PBView v = PBView(80, 500, 120, 40);
+PBView v1 = PBView(20, 500, 120, 18);
+PBView v2 = PBView(40, 500, 120, 18);
+PBView v3 = PBView(60, 500, 120, 18);
+PBView v4 = PBView(80, 500, 120, 18);
+PBView v5 = PBView(100, 500, 120, 18);
 Cube cube;
 
 // synth objects
@@ -199,8 +208,12 @@ void draw(){
     // }
 
   
-   v.draw(renderer);
-   cube.update(10,10);
+   v1.draw(renderer);
+   v2.draw(renderer);
+   v3.draw(renderer);
+   v4.draw(renderer);
+   v5.draw(renderer);
+   cube.update(renderer, v1.getValue()*10.0, v2.getValue()*1000.0, v3.getValue()*1000.0, v4.getValue()*10.0, v5.getValue()*10.0);
     
 
     SDL_RenderPresent(renderer);
@@ -232,31 +245,75 @@ int main(int argc, const char * argv[]) {
 
         while (SDL_PollEvent(&event) != 0) {
             if (event.type == SDL_MOUSEBUTTONDOWN) {
-                if (inRect(event, v)) {
+                if (inRect(event, v1)) {
+                    v1.setPressed(true);
                     std::cout << "inside f" << std::endl;
-                    v.setSelected(true);
+                    v1.setSelected(true);
                     mainAudioPipe_.editObject(1);
                     draw();
                 }
+                else if (inRect(event, v2)) { v2.setPressed(true); }
+                else if (inRect(event, v3)) { v3.setPressed(true); }
+                else if (inRect(event, v4)) { v4.setPressed(true); }
+                else if (inRect(event, v5)) { v5.setPressed(true); }
             }
             if (event.type == SDL_MOUSEBUTTONUP) {
-                if(inRect(event, v)) {
-                    v.setSelected(false);
+                v1.setPressed(false);
+                v2.setPressed(false);
+                v3.setPressed(false);
+                v4.setPressed(false);
+                v5.setPressed(false);
+                if(inRect(event, v1)) {
                     mainAudioPipe_.editObject(0);
                     draw();
                 }
             }
             if (event.type == SDL_MOUSEMOTION) {
-                if (inRect(event, v)) {
-                    float val = (float)(event.motion.y - v.mainRect.y) / (float)v.mainRect.h;
+                if (inRect(event, v1)) {
+                    float val = (float)(event.motion.y - v1.mainRect.y) / (float)v1.mainRect.h;
                     if (val >= 0.0 && val <= 1.0) {
-                        // std::cout << ">>>>>>>>>>>>>>>" << val << std::endl;
-                        v.setValue(val);
-                        v.draw(renderer);
-                        draw();
+                        v1.setValue(val);
+                        //v1.draw(renderer);
+                        //value01_ = val;
+                        draw();   
                         mainAudioPipe_.setCv((double)(1 - val));
                     }
+                }
 
+                if (inRect(event, v2)) {
+                    float val = (float)(event.motion.y - v2.mainRect.y) / (float)v2.mainRect.h;
+                    if (val >= 0.0 && val <= 1.0) {
+                        v2.setValue(val);
+                        //v2.draw(renderer);
+                        draw();   
+                    }
+                }
+
+                if (inRect(event, v3)) {
+                    float val = (float)(event.motion.y - v3.mainRect.y) / (float)v3.mainRect.h;
+                    if (val >= 0.0 && val <= 1.0) {
+                        v3.setValue(val);
+                        //v3.draw(renderer);
+                        draw();   
+                    }
+                }
+
+                if (inRect(event, v4)) {
+                    float val = (float)(event.motion.y - v4.mainRect.y) / (float)v4.mainRect.h;
+                    if (val >= 0.0 && val <= 1.0) {
+                        v4.setValue(val);
+                        //v4.draw(renderer);
+                        draw();   
+                    }
+                }
+
+                if (inRect(event, v5)) {
+                    float val = (float)(event.motion.y - v5.mainRect.y) / (float)v5.mainRect.h;
+                    if (val >= 0.0 && val <= 1.0) {
+                        v5.setValue(val);
+                        //v5.draw(renderer);
+                        draw();   
+                    }
                 }
             }
             if (event.type == SDL_KEYDOWN) {
